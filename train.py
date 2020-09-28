@@ -86,6 +86,9 @@ def train(args):
     for param in ema_model.parameters():
         param.detach_()
 
+    if local_rank == 0:
+        torch.distributed.barrier()
+
     cudnn.benchmark = True  # looking for optimal algorithms for this device
     
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=nesterov)
